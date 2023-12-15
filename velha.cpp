@@ -125,7 +125,7 @@ class Tabuleiro {
             for(int i = 0; i < tamanho; ++i) 
                 matrizPosicoes[i].assign(tamanho, POSICAO_NULA);
 
-            clog << "matriz do tabuleiro dimensionada com sucesso\n";
+            cerr << "matriz do tabuleiro dimensionada com sucesso\n";
         }
 
         // funcao que reseta a matriz de posicoes para o estado inicial
@@ -136,7 +136,7 @@ class Tabuleiro {
                     matrizPosicoes[i][j] = POSICAO_NULA;
             }
 
-            clog << "matriz do tabuleiro reiniciada com sucesso\n";
+            cerr << "matriz do tabuleiro reiniciada com sucesso\n";
         }
 
         // funcao que imprime a matriz de posicoes
@@ -184,17 +184,17 @@ class Tabuleiro {
         // funcao que insere um caractere na matriz de posicoes, e consequentemente no tabuleiro e no jogo
         bool inserirNaMatriz(int i, int j, char jogada) {
             if(i > tamanho - 1 || i < 0) {
-                clog << "inserção na matriz do tabuleiro falhou: a coordenada [x] esta fora da dimensao do tabuleiro\n";
+                cerr << "inserção na matriz do tabuleiro falhou: a coordenada [i] esta fora da dimensao do tabuleiro\n";
                 return false;
             }
 
             if(j > tamanho - 1 || j < 0) {
-                clog << "inserção na matriz do tabuleiro falhou: a coordenada [y] esta fora da dimensao do tabuleiro\n";
+                cerr << "inserção na matriz do tabuleiro falhou: a coordenada [j] esta fora da dimensao do tabuleiro\n";
                 return false;
             }
 
             if(matrizPosicoes[i][j] != POSICAO_NULA) {
-                clog << "inserção na matriz do tabuleiro falhou: a posicao (x, y) ja esta ocupada\n";
+                cerr << "inserção na matriz do tabuleiro falhou: a posicao [i][j] ja esta ocupada\n";
                 return false;
             }
 
@@ -228,12 +228,12 @@ void *jogada_jogador1(void*) {
 
     //impressão do tabuleiro
     tabuleiro.imprimir();
-    cout << "Jogador 1 jogando..." << endl;
+    cout << "Jogador " << JOGADOR1 << " jogando..." << endl;
     
     // leitura da jogada e teste se é uma jogada valida
     bool cond = false;
     while(cond == false) {
-        cout << "Insira as coordenadas da sua jogada: ";
+        cout << "Insira a linha e a coluna da sua jogada, respectivamente: ";
         int i, j;
         cin >> i >> j;
         cond = tabuleiro.inserirNaMatriz(i - 1, j - 1, JOGADOR1);
@@ -256,12 +256,12 @@ void *jogada_jogador2(void*) {
 
     //impressão do tabuleiro
     tabuleiro.imprimir();
-    cout << "Jogador 2 jogando..." << endl;
+    cout << "Jogador " << JOGADOR2 << " jogando..." << endl;
     
     // leitura da jogada e teste se é uma jogada valida
     bool cond = false;
     while(cond == false) {
-        cout << "Insira as coordenadas da sua jogada: ";
+        cout << "Insira a linha e a coluna da sua jogada, respectivamente: ";
         int i, j;
         cin >> i >> j;
         cond = tabuleiro.inserirNaMatriz(i - 1, j - 1, JOGADOR2);
