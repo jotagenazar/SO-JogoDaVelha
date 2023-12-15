@@ -238,9 +238,6 @@ void *jogada_jogador1(void*) {
         cond = tabuleiro.inserirNaMatriz(i - 1, j - 1, JOGADOR1);
     }
 
-    // liberando regiao crítica para jogada do próximo jogador
-    pthread_mutex_unlock(&mutex);
-
     return EXIT_SUCCESS;
 }
 
@@ -260,9 +257,6 @@ void *jogada_jogador2(void*) {
         cin >> i >> j;
         cond = tabuleiro.inserirNaMatriz(i - 1, j - 1, JOGADOR2);
     }
-
-    // liberando regiao crítica para jogada do próximo jogador
-    pthread_mutex_unlock(&mutex);
 
     return EXIT_SUCCESS;
 }
@@ -299,6 +293,7 @@ int main() {
         pthread_join(jogador1, NULL);
         if(ganhou = verificar_jogo(JOGADOR1)) break;
         ++rodada;
+        pthread_mutex_unlock(&mutex); // liberando regiao crítica para jogada do próximo jogador
 
         if(rodada == TAMANHO_TABULEIRO * TAMANHO_TABULEIRO) break;
 
@@ -308,6 +303,7 @@ int main() {
         pthread_join(jogador2, NULL);
         if(ganhou = verificar_jogo(JOGADOR2)) break;
         ++rodada;
+        pthread_mutex_unlock(&mutex); // liberando regiao crítica para jogada do próximo jogador
     }
 
     if(!ganhou) cout << "O jogo deu velha!!!\n\n";
