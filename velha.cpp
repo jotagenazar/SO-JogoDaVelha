@@ -239,9 +239,6 @@ void *jogada_jogador1(void*) {
         cond = tabuleiro.inserirNaMatriz(i - 1, j - 1, JOGADOR1);
     }
 
-    // impressao do resultado da jogada
-    tabuleiro.imprimir();
-
     // liberando regiao crítica para jogada do próximo jogador
     pthread_mutex_unlock(&mutex1);
 
@@ -266,9 +263,6 @@ void *jogada_jogador2(void*) {
         cin >> i >> j;
         cond = tabuleiro.inserirNaMatriz(i - 1, j - 1, JOGADOR2);
     }
-
-    // impressao do resultado da jogada
-    if(cond) tabuleiro.imprimir();
 
     // liberando regiao crítica para jogada do próximo jogador
     pthread_mutex_unlock(&mutex2);
