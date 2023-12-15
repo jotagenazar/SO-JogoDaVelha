@@ -12,7 +12,6 @@ Jogo da Velha - Multithreading para jogadores - Semáforo Mutex para zona críti
 #include <iostream>
 #include <thread>
 #include <pthread.h>
-#include <mutex>
 #include <vector>
 
 using namespace std;
