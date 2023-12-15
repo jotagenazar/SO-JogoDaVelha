@@ -1,7 +1,11 @@
 /*
 
-Alunos: João Gabriel Manfré Nazar - 13733652
+Alunos: Gabriela Amadori - 11832916
+        João Gabriel Manfré Nazar - 13733652
         João Pedro Mori Machado - 13671831
+        João Vitor Alves de Medeiros - 13726762
+
+Jogo da Velha - Multithreading para jogadores - Semáforo Mutex para zona crítica da alteração do tabuleiro
 
 */
 
@@ -125,7 +129,7 @@ class Tabuleiro {
             for(int i = 0; i < tamanho; ++i) 
                 matrizPosicoes[i].assign(tamanho, POSICAO_NULA);
 
-            cerr << "matriz do tabuleiro dimensionada com sucesso\n";
+            cout << "matriz do tabuleiro dimensionada com sucesso\n";
         }
 
         // funcao que reseta a matriz de posicoes para o estado inicial
@@ -136,7 +140,7 @@ class Tabuleiro {
                     matrizPosicoes[i][j] = POSICAO_NULA;
             }
 
-            cerr << "matriz do tabuleiro reiniciada com sucesso\n";
+            cout << "matriz do tabuleiro reiniciada com sucesso\n";
         }
 
         // funcao que imprime a matriz de posicoes
@@ -184,17 +188,17 @@ class Tabuleiro {
         // funcao que insere um caractere na matriz de posicoes, e consequentemente no tabuleiro e no jogo
         bool inserirNaMatriz(int i, int j, char jogada) {
             if(i > tamanho - 1 || i < 0) {
-                cerr << "inserção na matriz do tabuleiro falhou: a coordenada [i] esta fora da dimensao do tabuleiro\n";
+                cout << "Inserção na matriz do tabuleiro falhou: a coordenada [i] esta fora da dimensao do tabuleiro\n";
                 return false;
             }
 
             if(j > tamanho - 1 || j < 0) {
-                cerr << "inserção na matriz do tabuleiro falhou: a coordenada [j] esta fora da dimensao do tabuleiro\n";
+                cout << "Inserção na matriz do tabuleiro falhou: a coordenada [j] esta fora da dimensao do tabuleiro\n";
                 return false;
             }
 
             if(matrizPosicoes[i][j] != POSICAO_NULA) {
-                cerr << "inserção na matriz do tabuleiro falhou: a posicao [i][j] ja esta ocupada\n";
+                cout << "Inserção na matriz do tabuleiro falhou: a posicao [i][j] ja esta ocupada\n";
                 return false;
             }
 
@@ -227,7 +231,6 @@ void *jogada_jogador1(void*) {
     pthread_cond_wait(&cond_1, &mutex1);
 
     //impressão do tabuleiro
-    tabuleiro.imprimir();
     cout << "Jogador " << JOGADOR1 << " jogando..." << endl;
     
     // leitura da jogada e teste se é uma jogada valida
@@ -251,8 +254,6 @@ void *jogada_jogador2(void*) {
     pthread_mutex_lock(&mutex2);
     pthread_cond_wait(&cond_2, &mutex2);
 
-    //impressão do tabuleiro
-    tabuleiro.imprimir();
     cout << "Jogador " << JOGADOR2 << " jogando..." << endl;
     
     // leitura da jogada e teste se é uma jogada valida
@@ -297,12 +298,14 @@ int main() {
         int ret2_thread = pthread_create(&jogador2, NULL, jogada_jogador2, NULL);
 
         // Vez do jogador1 jogar
+        tabuleiro.imprimir();
         pthread_cond_signal(&cond_1);
         pthread_join(jogador1, NULL);
         if(ganhou = verificar_jogo(JOGADOR1)) break;
         ++rodada;
 
         // Vz do jogador2 jogar
+        tabuleiro.imprimir();
         pthread_cond_signal(&cond_2);
         pthread_join(jogador2, NULL);
         if(ganhou = verificar_jogo(JOGADOR2)) break;
