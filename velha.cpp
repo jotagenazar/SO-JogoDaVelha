@@ -237,6 +237,8 @@ void *jogada_jogador1(void*) {
         cond = tabuleiro.inserirNaMatriz(i - 1, j - 1, JOGADOR1);
     }
 
+    pthread_mutex_unlock(&mutex1); // liberando regiao crítica para jogada do próximo jogador
+
     return EXIT_SUCCESS;
 }
 
@@ -256,6 +258,8 @@ void *jogada_jogador2(void*) {
         cin >> i >> j;
         cond = tabuleiro.inserirNaMatriz(i - 1, j - 1, JOGADOR2);
     }
+
+    pthread_mutex_unlock(&mutex1); // liberando regiao crítica para jogada do próximo jogador
 
     return EXIT_SUCCESS;
 }
@@ -286,20 +290,26 @@ int main() {
         int ret1_thread = pthread_create(&jogador1, NULL, jogada_jogador1, NULL);
         int ret2_thread = pthread_create(&jogador2, NULL, jogada_jogador2, NULL);
 
-        // Vez do jogador1 jogar
+        // Vez do jogador1 
         tabuleiro.imprimir();
         pthread_cond_signal(&cond_1);
         pthread_join(jogador1, NULL);
+
+        // checagem de vitória do jogador1
+        pthread_mutex_lock(&mutex1);
         if(ganhou = verificar_jogo(JOGADOR1)) break;
         ++rodada;
         pthread_mutex_unlock(&mutex1); // liberando regiao crítica para jogada do próximo jogador
 
         if(rodada == TAMANHO_TABULEIRO * TAMANHO_TABULEIRO) break;
 
-        // Vz do jogador2 jogar
+        // Vez do jogador2 
         tabuleiro.imprimir();
         pthread_cond_signal(&cond_2);
         pthread_join(jogador2, NULL);
+
+        // checagem de vitória do jogador2
+        pthread_mutex_lock(&mutex1);
         if(ganhou = verificar_jogo(JOGADOR2)) break;
         ++rodada;
         pthread_mutex_unlock(&mutex1); // liberando regiao crítica para jogada do próximo jogador
