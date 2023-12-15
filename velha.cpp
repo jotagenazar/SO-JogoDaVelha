@@ -304,6 +304,8 @@ int main() {
         if(ganhou = verificar_jogo(JOGADOR1)) break;
         ++rodada;
 
+        if(rodada == TAMANHO_TABULEIRO * TAMANHO_TABULEIRO) break;
+
         // Vz do jogador2 jogar
         tabuleiro.imprimir();
         pthread_cond_signal(&cond_2);
