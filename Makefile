@@ -1,13 +1,13 @@
 CC = g++
-FLAGS = -g -pthread
+FLAGS = -pthread
 
 BIN = main
 
-all: $(OBJECTS)
-	$(CC) -o $(BIN) $(FLAGS) 
+all:
+	$(CC) velha.cpp -o $(BIN) $(FLAGS) 
 
 clean: 
 	rm $(BIN)
 
 run:
-	./$(BIN)
+	./main
