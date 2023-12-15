@@ -23,7 +23,7 @@ pthread_cond_t cond_1 = PTHREAD_COND_INITIALIZER;
 pthread_cond_t cond_2 = PTHREAD_COND_INITIALIZER;
 
 // Inicialização do semáforo binário do tipo mutex
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 
 // Definicoes gerais de convencoes do programa
 #define TAMANHO_TABULEIRO 3
@@ -223,8 +223,8 @@ Tabuleiro tabuleiro;
 // funcao de jogada do jogador 1
 void *jogada_jogador1(void*) {
     // lockando a região crítica, que é a jogada/alteraçao da matriz de posicoes, ou seja, o tabuleiro
-    pthread_mutex_lock(&mutex);
-    pthread_cond_wait(&cond_1, &mutex);
+    pthread_mutex_lock(&mutex1);
+    pthread_cond_wait(&cond_1, &mutex1);
 
     //impressão do tabuleiro
     cout << "Jogador " << JOGADOR1 << " jogando..." << endl;
@@ -244,8 +244,8 @@ void *jogada_jogador1(void*) {
 // funcao de jogada do jogador 2
 void *jogada_jogador2(void*) {
     // lockando a região crítica, que é a jogada/alteraçao da matriz de posicoes, ou seja, o tabuleiro
-    pthread_mutex_lock(&mutex);
-    pthread_cond_wait(&cond_2, &mutex);
+    pthread_mutex_lock(&mutex1);
+    pthread_cond_wait(&cond_2, &mutex1);
 
     cout << "Jogador " << JOGADOR2 << " jogando..." << endl;
     
@@ -293,7 +293,7 @@ int main() {
         pthread_join(jogador1, NULL);
         if(ganhou = verificar_jogo(JOGADOR1)) break;
         ++rodada;
-        pthread_mutex_unlock(&mutex); // liberando regiao crítica para jogada do próximo jogador
+        pthread_mutex_unlock(&mutex1); // liberando regiao crítica para jogada do próximo jogador
 
         if(rodada == TAMANHO_TABULEIRO * TAMANHO_TABULEIRO) break;
 
@@ -303,7 +303,7 @@ int main() {
         pthread_join(jogador2, NULL);
         if(ganhou = verificar_jogo(JOGADOR2)) break;
         ++rodada;
-        pthread_mutex_unlock(&mutex); // liberando regiao crítica para jogada do próximo jogador
+        pthread_mutex_unlock(&mutex1); // liberando regiao crítica para jogada do próximo jogador
     }
 
     if(!ganhou) cout << "O jogo deu velha!!!\n\n";
